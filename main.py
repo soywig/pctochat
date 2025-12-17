@@ -10,6 +10,7 @@ import socket
 PORT = 2004
 
 custom_address = None
+verbose = False
 
 def get_local_ip():
     """Get the local IP address of the machine."""
@@ -83,8 +84,9 @@ def send_new_user_message(username):
             clients.remove(q)
 
 def log(msg):
-    timestamp = "[{:%Y-%m-%d %H:%M:%S}]".format(datetime.now())
-    print(f"{timestamp}: {msg}")
+    if verbose:
+        timestamp = "[{:%Y-%m-%d %H:%M:%S}]".format(datetime.now())
+        print(f"{timestamp}: {msg}")
 
 if __name__ == "__main__":
     import socket
@@ -94,12 +96,14 @@ if __name__ == "__main__":
     parser.add_argument("--server", "-s", action="store_true", help="run server in headless mode without opening a browser")
     parser.add_argument("--threads", "-t", type=int, help="number of threads to use (default: %(default)s)", default=8)
     parser.add_argument("--address", "-a", type=str, help="address displayed to users in browser", default="0.0.0.0")
+    parser.add_argument("--verbose", "-v", action="store_true", help="enable verbose logging")
     args = parser.parse_args()
 
     port = args.port or PORT
     open_browser = not args.server
     threads = args.threads
     custom_address = args.address
+    verbose = args.verbose
 
     local_ip = get_local_ip()
 
